@@ -28,7 +28,7 @@ class TestGetRequest(unittest.TestCase):
         # Assert that the mock_get function was called with the correct URL
         mock_get.assert_called_with(f"http://{ip_address}/")
 
-        print("Test passed successfully")
+        print("Test passed successfully!")
 
 
 if __name__ == "__main__":

@@ -12,8 +12,6 @@ kubectl apply -f flask-app-ingress.yaml
 
 MINIKUBE_IP=$(minikube ip)
 
-export MINIKUBE_IP
-
 sleep 20
 
 curl $MINIKUBE_IP
