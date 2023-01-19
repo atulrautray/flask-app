@@ -40,7 +40,6 @@ The (containerized) Flask app is deployed on kubernetes using three components: 
   * Wait 20 seconds for ingress to get assigned an IP (same as minikube ip)
   * Send curl GET request to the ingress IP
  
-***
 ## Running the Project
 
 ### Dependencies
@@ -60,7 +59,6 @@ The (containerized) Flask app is deployed on kubernetes using three components: 
 chmod +x build-and-deploy.sh
 ```
 
-***
 ## Testing
 
 * To run the test, use the following command. (Note-requires requests module)
@@ -72,7 +70,6 @@ python3 test.py
 minikube ip
 ```
 
-***
 ## Key Points, Questions, Problems and Fixes
 
 ### Flask app should run on 0.0.0.0
