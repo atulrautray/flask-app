@@ -88,9 +88,13 @@ minikube ip
 
 * Minikube is a single node cluster by default. Consequesntly, the pod with the app is deployed in the control plane. Is this ok/bad/dangerous?
 
-### Cluster-IP
+### Does the default Cluster-IP service act as a Load Balancer?
 
-* How does clusterip decide which pod to forward traffic to? Does it act as a load balancer?
+* The Service resource is indeed a load-balancer. Depending on the proxy mode it could be round-robin or random. If you're going with the default (iptables-based proxy) it would be a random pod selected every time you hit the virtual IP of the service. [Source](https://stackoverflow.com/questions/52268491/how-does-kubernetes-service-decide-which-backend-pod-to-route-to)
+
+### Load Balancer vs Ingress
+
+* Load Balancers in Kubernetes have quite a bit of overlap with ingresses. This is because they are primarily used to expose services to the internet, which is also a feature of ingresses. However, rather than a standalone object like an ingress, a load balancer is just an extension/type of a service. [Source](https://www.baeldung.com/ops/kubernetes-ingress-vs-load-balancer)
 
 ### Using a Custom URL for Ingress
 
