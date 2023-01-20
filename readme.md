@@ -121,7 +121,3 @@ minikube ip
 ### Ingress Controller Error
 
 * Occassionally, would get error when trying to create ingress (Internal error occurred: failed calling webhook). Resolved by removing the Validating Webhook entirely. [Source](https://stackoverflow.com/questions/61616203/nginx-ingress-controller-failed-calling-webhook)
-
-### Ingress IP
-
-* Does ingress always have the IP? IP has been hardcoded in test.py until work-around is found.
