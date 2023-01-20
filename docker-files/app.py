@@ -6,11 +6,9 @@ app = Flask(__name__)
 @app.route("/", methods=["GET"])
 def home():
     if request.method == "GET":
-        return {
-            "myFavoriteAthlete": "Usain Bolt"
-        }  # return JSON object if request method is GET
+        return {"myFavoriteAthlete": "Usain Bolt"}, 200
     else:
-        return "Only GET method valid"  # return message if request method is not GET
+        return "Only GET method valid", 400
 
 
 if __name__ == "__main__":
