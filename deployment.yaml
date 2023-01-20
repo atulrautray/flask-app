@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: flask-app
-        image: atulrautray/flaskapp:latest
+        image: sampleaccount9234/flaskapp:latest
         resources:
           limits:
             memory: "128Mi"

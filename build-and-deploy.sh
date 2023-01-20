@@ -1,17 +1,38 @@
 #!/bin/bash
 
-export KUBECONFIG=./mykube.conf
+cd docker-files
 
-minikube start
+# Run the test script
+python3 test.py
 
-kubectl apply -f deployment.yaml
+# Check if the test passed
+if [ $? -eq 0 ]; then
+    echo "Tests passed"
 
-kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
+    echo "Building image"
+    docker build -t sampleaccount9234/flaskapp:latest .
 
-kubectl apply -f flask-app-ingress.yaml
+    echo "Pushing image to dockerhub"
+    echo "Samplepassword123" | docker login -u "sampleaccount9234" --password-stdin
+    docker push sampleaccount9234/flaskapp:latest
 
-MINIKUBE_IP=$(minikube ip)
+    cd ..
 
-sleep 20
+    export KUBECONFIG=./mykube.conf
 
-curl $MINIKUBE_IP
+    minikube start
+
+    kubectl apply -f deployment.yaml
+
+    kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
+
+    kubectl apply -f flask-app-ingress.yaml
+
+    MINIKUBE_IP=$(minikube ip)
+
+    sleep 20
+
+    curl $MINIKUBE_IP
+else
+    echo "Tests failed"
+fi

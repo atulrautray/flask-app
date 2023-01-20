@@ -21,16 +21,22 @@ The resulting Docker Image is then pushed to a public repo (atulrautray/flask-ap
 The (containerized) Flask app is deployed on kubernetes using three components: deployment, service and ingress.
 
 #### Deployment
+
 * The deployment defines a deployment named "flask-app" with 3 pod replicas. The container uses the previously built image named "atulrautray/flaskapp:latest" and it has specific resource limits for memory and CPU. The container listens on port 5000.
 
 #### Service
+
 * The service provides an endpoint for accessing the pods managed by the deployment. This service is named "flask-app-service" and it uses a label selector to determine which pods it should send traffic to, in this case pods with the label "app: flask-app". The service listens on port 5000, and forwards traffic to the target port 5000 on the pods.
 
 #### Ingress
+
 * Ingress exposes HTTP and HTTPS routes from outside the cluster to services within the cluster. The ingress is directing traffic to the service named "flask-app-service" on port 5000. The service resource has a selector that matches pods labeled with "app: flask-app" and it exposes the service on port 5000.
 
 #### build-and-deploy script
+
 * The build-and-deploy script does the following in order:
+  * Run a mock test on the Flask app
+  * If test is successful, build and push docker image
   * Set new path for KUBECONF (see Fixes section for details)
   * Start a minikube cluster
   * Apply a deployment and service
@@ -46,7 +52,7 @@ The (containerized) Flask app is deployed on kubernetes using three components: 
 
 * minikube
 * curl
-* requests
+* flask module
 
 ### Executing program
 
@@ -61,14 +67,18 @@ chmod +x build-and-deploy.sh
 
 ## Testing
 
-* To run the test, use the following command. (Note-requires requests module)
-```
-python3 test.py
-```
-* To test the server manually, the IP can be found using the following command (flask-app/minikube should be running).
+* The Flask app's functionality is tested by the test.py file (in docker-files directory) before the docker image is built. The test.py does not need the Flask server to be running, it directly tests the functions in the app. No HTTP requests are made.
+
+* To test the server manually, the IP can be found using the following command (flask-app and minikube should be running).
 ```
 minikube ip
 ```
+
+* With the IP we get from the above command, we can try different URL's such as:
+  * <ip from previous command\>.nip.io
+  * atuls-fav-athlete.<ip from previous command\>.nip.io
+  * loacal-arc.<ip from previous command\>.nip.io
+  * Go to [nip.io](https://nip.io/) for details
 
 ## Key Points, Questions, Problems and Fixes
 
@@ -80,9 +90,17 @@ minikube ip
 
 * Find ways to minimize size of image (try --no-cache??)
 
+### Password in build-and-deploy.sh
+
+*  Does minikube/kubernetes look for docker images locally?? Docker password is exposed(!) in shell script to push to dockerhub.
+
 ### kube.conf Permission Denied
 
 * Unable to run minikube cluster because default kube.conf path permissions. Set $KUBECONFIG to a different config file as a workaround.
+
+### What is the Kubeconfig file? What are contexts?
+
+* The kubeconfig file is a configuration file used by the command-line tool kubectl to connect to a Kubernetes cluster. It is a JSON or YAML file that contains information such as the API server endpoint, the authentication method and credentials, and the default namespace. Contexts is a combination of cluster, user and namespace.
 
 ### Running Pods on Control Plane
 
