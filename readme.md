@@ -14,7 +14,7 @@ The Flask server will only respond to requests made using the HTTP GET method. W
 
 This Dockerfile starts with the base image "python:3.10-alpine", which is a minimal Alpine Linux distribution with Python 3.10 installed. Application files are then copied into the docker container using "WORKDIR" to create a container directory and "COPY" to copy contents. The neccessary dependancies (listed in the requirements.txt file) are installed using "RUN".
 
-The resulting Docker Image is then pushed to a public repo (atulrautray/flask-app) to be accessed later by the kubernetes deployment.
+The resulting Docker Image is then pushed to a public repo (sampleaccount9234/flask-app) to be accessed later by the kubernetes deployment.
 
 ### Kubernetes
 
@@ -22,7 +22,7 @@ The (containerized) Flask app is deployed on kubernetes using three components: 
 
 #### Deployment
 
-* The deployment defines a deployment named "flask-app" with 3 pod replicas. The container uses the previously built image named "atulrautray/flaskapp:latest" and it has specific resource limits for memory and CPU. The container listens on port 5000.
+* The deployment defines a deployment named "flask-app" with 3 pod replicas. The container uses the previously built image named "sampleaccount9234/flaskapp:latest" and it has specific resource limits for memory and CPU. The container listens on port 5000.
 
 #### Service
 
@@ -43,7 +43,7 @@ The (containerized) Flask app is deployed on kubernetes using three components: 
   * Delete Validating Webhook (see Fixes section for details)
   * Apply ingress
   * Store minikube IP in a shell variable
-  * Wait 20 seconds for ingress to get assigned an IP (same as minikube ip)
+  * Wait 20 seconds for ingress to get assigned an IP
   * Send curl GET request to the ingress IP
  
 ## Running the Project
@@ -56,11 +56,11 @@ The (containerized) Flask app is deployed on kubernetes using three components: 
 
 ### Executing program
 
-* To run the flask-app, use the following command. The app should run and produce the output of a get request.
+* To run the flask-app, use the following command. The app should run and produce the output of a GET request.
 ```
 ./build-and-deploy.sh
 ```
-* If permission is denied to execute run.sh, allow execution by running this command first.
+* If permission is denied to execute build-and-deploy.sh, allow execution by running this command first.
 ```
 chmod +x build-and-deploy.sh
 ```
@@ -69,12 +69,12 @@ chmod +x build-and-deploy.sh
 
 * The Flask app's functionality is tested by the test.py file (in docker-files directory) before the docker image is built. The test.py does not need the Flask server to be running, it directly tests the functions in the app. No HTTP requests are made.
 
-* To test the server manually, the IP can be found using the following command (flask-app and minikube should be running).
+* To test the server manually, the IP can be found using the following command (flask-app and minikube should be running). curl requests can be sent to this IP to verify that app is running.
 ```
 minikube ip
 ```
 
-* With the IP we get from the above command, we can try different URL's such as:
+* With the IP from the above command, we can try different URL's such as:
   * <ip from previous command\>.nip.io
   * atuls-fav-athlete.<ip from previous command\>.nip.io
   * loacal-arc.<ip from previous command\>.nip.io
@@ -86,11 +86,11 @@ minikube ip
 
 * By defaut flask will bind to localhost a.k.a. 127.0.0.1 which is only accessible to process running on the same machine. Docker containers are virtually different machines. Defining 0.0.0.0 is more or less 'listen to all'. That way the app will run on any internal ip address it will get from the docker infrastructure. [Source](https://www.reddit.com/r/docker/comments/xwfm08/why_do_i_need_to_specify_host0000_when_running_a/)
 
-### Size of Docker Image
+### Reduce Size of Docker Image?
 
 * Find ways to minimize size of image (try --no-cache??)
 
-### Password in build-and-deploy.sh
+### Password in build-and-deploy.sh?!
 
 *  Does minikube/kubernetes look for docker images locally?? Docker password is exposed(!) in shell script to push to dockerhub.
 
@@ -98,15 +98,15 @@ minikube ip
 
 * Unable to run minikube cluster because default kube.conf path permissions. Set $KUBECONFIG to a different config file as a workaround.
 
-### What is the Kubeconfig file? What are contexts?
+### Kubeconfig file and Contexts
 
 * The kubeconfig file is a configuration file used by the command-line tool kubectl to connect to a Kubernetes cluster. It is a JSON or YAML file that contains information such as the API server endpoint, the authentication method and credentials, and the default namespace. Contexts is a combination of cluster, user and namespace.
 
-### Running Pods on Control Plane
+### Running Pods on Control Plane?
 
 * Minikube is a single node cluster by default. Consequesntly, the pod with the app is deployed in the control plane. Is this ok/bad/dangerous?
 
-### Does the default Cluster-IP service act as a Load Balancer?
+### Cluster-IP Service Forwarding
 
 * The Service resource is indeed a load-balancer. Depending on the proxy mode it could be round-robin or random. If you're going with the default (iptables-based proxy) it would be a random pod selected every time you hit the virtual IP of the service. [Source](https://stackoverflow.com/questions/52268491/how-does-kubernetes-service-decide-which-backend-pod-to-route-to)
 
