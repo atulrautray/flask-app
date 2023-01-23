@@ -69,7 +69,7 @@ The (containerized) Flask app is deployed on kubernetes using three components: 
 ```
 chmod +x build-and-deploy.sh
 <or>
-chmod +x build-and-deploy.sh
+chmod +x delete.sh
 ```
 
 ## Testing
