@@ -64,6 +64,10 @@ The (containerized) Flask app is deployed on kubernetes using three components: 
 ```
 chmod +x build-and-deploy.sh
 ```
+* To delete the deployment, service and ingress use the following command.
+```
+./delete.sh
+```
 
 ## Testing
 
@@ -90,9 +94,9 @@ minikube ip
 
 * Find ways to minimize size of image (try --no-cache??)
 
-### Password in build-and-deploy.sh?!
+### Using local Docker Images
 
-*  Does minikube/kubernetes look for docker images locally?? Docker password is exposed(!) in shell script to push to dockerhub.
+*  Instead of pushing the image to dockerhub and making kubernetes pull from there, minikkube looks for the local image. Firstly, switch the context of docker to minikube using eval $(minikube docker-env). Secondly, change the deployment to make sure it never pulls an image by setting imagePullPolicy: Never.
 
 ### kube.conf Permission Denied
 

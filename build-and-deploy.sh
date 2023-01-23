@@ -1,7 +1,5 @@
 #!/bin/bash
 
-cd docker-files
-
 # Run the test script
 python3 test.py
 
@@ -9,18 +7,14 @@ python3 test.py
 if [ $? -eq 0 ]; then
     echo "Tests passed"
 
-    echo "Building image"
-    docker build -t sampleaccount9234/flaskapp:latest .
-
-    echo "Pushing image to dockerhub"
-    echo "Samplepassword123" | docker login -u "sampleaccount9234" --password-stdin
-    docker push sampleaccount9234/flaskapp:latest
-
-    cd ..
-
-    export KUBECONFIG=./mykube.conf
+    unset KUBECONFIG
 
     minikube start
+
+    eval $(minikube docker-env)
+
+    echo "Building image"
+    docker build -t flaskapp:latest .
 
     kubectl apply -f deployment.yaml
 
