@@ -62,13 +62,15 @@ The (containerized) Flask app is deployed on kubernetes using three components: 
 ```
 ./build-and-deploy.sh
 ```
-* If permission is denied to execute build-and-deploy.sh, allow execution by running this command first.
-```
-chmod +x build-and-deploy.sh
-```
 * To delete the deployment, service and ingress use the following command.
 ```
 ./delete.sh
+```
+* If permission is denied while trying to execute either shell script, allow execution by running this command first.
+```
+chmod +x build-and-deploy.sh
+<or>
+chmod +x build-and-deploy.sh
 ```
 
 ## Testing
