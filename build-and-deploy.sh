@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Install Flask
+pip3 install flask
+
 # Run the test script
 python3 test.py
 

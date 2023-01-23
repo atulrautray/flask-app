@@ -14,15 +14,13 @@ The Flask server will only respond to requests made using the HTTP GET method. W
 
 This Dockerfile starts with the base image "python:3.10-alpine", which is a minimal Alpine Linux distribution with Python 3.10 installed. Application files are then copied into the docker container using "WORKDIR" to create a container directory and "COPY" to copy contents. The neccessary dependancies (listed in the requirements.txt file) are installed using "RUN".
 
-The resulting Docker Image is then pushed to a public repo (sampleaccount9234/flask-app) to be accessed later by the kubernetes deployment.
-
 ### Kubernetes
 
 The (containerized) Flask app is deployed on kubernetes using three components: deployment, service and ingress.
 
 #### Deployment
 
-* The deployment defines a deployment named "flask-app" with 3 pod replicas. The container uses the previously built image named "sampleaccount9234/flaskapp:latest" and it has specific resource limits for memory and CPU. The container listens on port 5000.
+* The deployment defines a deployment named "flask-app" with 3 pod replicas. The container uses the previously built image named "flaskapp:latest" and it has specific resource limits for memory and CPU. The container listens on port 5000. The pod is configured to run as a non-root user.
 
 #### Service
 
@@ -35,6 +33,7 @@ The (containerized) Flask app is deployed on kubernetes using three components: 
 ### build-and-deploy script
 
 * The build-and-deploy script does the following in order:
+  * Install flask
   * Run a mock test on the Flask app
   * If test is successful
   * Unset KUBECONF
