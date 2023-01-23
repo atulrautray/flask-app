@@ -10,7 +10,7 @@ python3 test.py
 if [ $? -eq 0 ]; then
     echo "Tests passed"
 
-    unset KUBECONFIG
+    export KUBECONFIG=./mykubectl.conf
 
     minikube start
 
@@ -27,9 +27,11 @@ if [ $? -eq 0 ]; then
 
     MINIKUBE_IP=$(minikube ip)
 
-    sleep 20
+    sleep 10
 
     curl $MINIKUBE_IP
+
+    export KUBECONFIG=./mykubectl.conf
 else
     echo "Tests failed"
 fi
