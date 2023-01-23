@@ -20,7 +20,7 @@ The (containerized) Flask app is deployed on kubernetes using three components: 
 
 #### Deployment
 
-* The deployment defines a deployment named "flask-app" with 3 pod replicas. The container uses the previously built image named "flaskapp:latest" and it has specific resource limits for memory and CPU. The container listens on port 5000. The pod is configured to run as a non-root user.
+* The deployment defines a deployment named "flask-app" with 3 pod replicas. The container uses the previously built image named "flaskapp:latest" and it has specific resource limits for memory and CPU. The container listens on port 5000.
 
 #### Service
 
@@ -69,22 +69,22 @@ The (containerized) Flask app is deployed on kubernetes using three components: 
 ```
 chmod +x build-and-deploy.sh
 <or>
-chmod +x delete.sh
+chmod +x deletes.sh
 ```
 
 ## Testing
 
 * The Flask app's functionality is tested by the test.py file before the docker image is built. The test.py does not need the Flask server to be running, it directly tests the functions in the app. No HTTP requests are made.
 
-* To test the server manually, the IP can be found using the following command (flask-app and minikube should be running). curl requests can be sent to this IP to verify that app is running.
+* To test the server manually, the IP can be found using the following command (flask-app and minikube should be running). curl requests can be sent to this IP (to the /athlete endpoint specifically) to verify that app is running.
 ```
 minikube ip
 ```
 
 * With the IP from the above command, we can try different URL's such as:
-  * <ip from previous command\>.nip.io
-  * atuls-fav-athlete.<ip from previous command\>.nip.io
-  * loacal-arc.<ip from previous command\>.nip.io
+  * <ip from previous command\>.nip.io/athlete
+  * atuls-fav-athlete.<ip from previous command\>.nip.io/athlete
+  * loacal-arc.<ip from previous command\>.nip.io/athlete
   * Go to [nip.io](https://nip.io/) for details
 
 ## Key Points, Questions, Problems and Fixes
@@ -99,7 +99,7 @@ minikube ip
 
 ### Using local Docker Images
 
-*  Instead of pushing the image to dockerhub and making kubernetes pull from there, minikkube looks for the local image. Firstly, switch the context of docker to minikube using eval $(minikube docker-env). Secondly, change the deployment to make sure it never pulls an image by setting imagePullPolicy: Never.
+*  Instead of pushing the image to dockerhub and making kubernetes pull from there, minikube looks for the local image. Firstly, switch the context of docker to minikube using eval $(minikube docker-env). Secondly, change the deployment to make sure it never pulls an image by setting imagePullPolicy: Never.
 
 ### kube.conf Permission Denied
 
