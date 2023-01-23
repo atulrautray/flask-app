@@ -36,9 +36,11 @@ The (containerized) Flask app is deployed on kubernetes using three components: 
 
 * The build-and-deploy script does the following in order:
   * Run a mock test on the Flask app
-  * If test is successful, build and push docker image
-  * Set new path for KUBECONF (see Fixes section for details)
+  * If test is successful
+  * Unset KUBECONF
   * Start a minikube cluster
+  * Switch the context of docker
+  * Build the docker image
   * Apply a deployment and service
   * Delete Validating Webhook (see Fixes section for details)
   * Apply ingress
@@ -71,7 +73,7 @@ chmod +x build-and-deploy.sh
 
 ## Testing
 
-* The Flask app's functionality is tested by the test.py file (in docker-files directory) before the docker image is built. The test.py does not need the Flask server to be running, it directly tests the functions in the app. No HTTP requests are made.
+* The Flask app's functionality is tested by the test.py file before the docker image is built. The test.py does not need the Flask server to be running, it directly tests the functions in the app. No HTTP requests are made.
 
 * To test the server manually, the IP can be found using the following command (flask-app and minikube should be running). curl requests can be sent to this IP to verify that app is running.
 ```
@@ -100,7 +102,7 @@ minikube ip
 
 ### kube.conf Permission Denied
 
-* Unable to run minikube cluster because default kube.conf path permissions. Set $KUBECONFIG to a different config file as a workaround.
+* Unable to run minikube cluster because default kube.conf path permissions. Unset KUBECONFIG.
 
 ### Kubeconfig file and Contexts
 
