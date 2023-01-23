@@ -10,9 +10,11 @@ python3 test.py
 if [ $? -eq 0 ]; then
     echo "Tests passed"
 
-    export KUBECONFIG=./mykubectl.conf
+    unset KUBECONFIG
 
     minikube start
+
+    minikube addons enable ingress
 
     eval $(minikube docker-env)
 
@@ -29,9 +31,7 @@ if [ $? -eq 0 ]; then
 
     sleep 10
 
-    curl $MINIKUBE_IP
-
-    export KUBECONFIG=./mykubectl.conf
+    curl $MINIKUBE_IP/athlete
 else
     echo "Tests failed"
 fi
