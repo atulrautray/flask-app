@@ -1,5 +1,7 @@
 #!/bin/bash
 
+unset KUBECONFIG
+
 # Delete Deployment
 kubectl delete deployment flask-app
 
