@@ -12,7 +12,7 @@ The Flask server will only respond to requests made using the HTTP GET method. W
 
 ### Docker File
 
-This Dockerfile starts with the base image "python:3.10-alpine", which is a minimal Alpine Linux distribution with Python 3.10 installed. Application files are then copied into the docker container using "WORKDIR" to create a container directory and "COPY" to copy contents. The neccessary dependancies (listed in the requirements.txt file) are installed using "RUN".
+This Dockerfile starts with the base image "python:3.10-alpine", which is a minimal Alpine Linux distribution with Python 3.10 installed. Application files are then copied into the docker container using "WORKDIR" to create a container directory and "COPY" to copy contents. The neccessary dependancies (listed in the requirements.txt file) are installed using "RUN". The flask app is run using gunicorn WSGI server.
 
 ### Kubernetes
 
@@ -20,11 +20,11 @@ The (containerized) Flask app is deployed on kubernetes using three components: 
 
 #### Deployment
 
-* The deployment defines a deployment named "flask-app" with 3 pod replicas. The container uses the previously built image named "flaskapp:latest" and it has specific resource limits for memory and CPU. The container listens on port 5000.
+* The deployment defines a deployment named "flask-app" with 3 pod replicas. The container uses the previously built image named "flaskapp:latest" and it has specific resource limits for memory and CPU. The container listens on port 8000.
 
 #### Service
 
-* The service provides an endpoint for accessing the pods managed by the deployment. This service is named "flask-app-service" and it uses a label selector to determine which pods it should send traffic to, in this case pods with the label "app: flask-app". The service listens on port 5000, and forwards traffic to the target port 5000 on the pods.
+* The service provides an endpoint for accessing the pods managed by the deployment. This service is named "flask-app-service" and it uses a label selector to determine which pods it should send traffic to, in this case pods with the label "app: flask-app". The service listens on port 8000, and forwards traffic to the target port 8000 on the pods.
 
 #### Ingress
 
@@ -44,7 +44,7 @@ The (containerized) Flask app is deployed on kubernetes using three components: 
   * Delete Validating Webhook (see Fixes section for details)
   * Apply ingress
   * Store minikube IP in a shell variable
-  * Wait 20 seconds for ingress to get assigned an IP
+  * Wait 10 seconds for ingress to get assigned an IP
   * Send curl GET request to the ingress IP
  
 ## Running the Project
@@ -71,6 +71,10 @@ chmod +x build-and-deploy.sh
 <or>
 chmod +x deletes.sh
 ```
+* Note- Sometimes kubectl commands give error: "The connection to the server localhost:8080 was refused - did you specify the right host or port?". This is due to minikube refering to another config file. To resolve run this command.
+```
+unset KUBECONFIG
+```
 
 ## Testing
 
@@ -92,6 +96,9 @@ minikube ip
 ### Flask app should run on 0.0.0.0
 
 * By defaut flask will bind to localhost a.k.a. 127.0.0.1 which is only accessible to process running on the same machine. Docker containers are virtually different machines. Defining 0.0.0.0 is more or less 'listen to all'. That way the app will run on any internal ip address it will get from the docker infrastructure. [Source](https://www.reddit.com/r/docker/comments/xwfm08/why_do_i_need_to_specify_host0000_when_running_a/)
+
+### Using a WSGI server
+* Gunicorn is a pure-Python HTTP server for WSGI applications. It allows you to run any Python application concurrently by running multiple Python processes. For this context only one worker process is used, because concurrency is achieved using multiple pods.
 
 ### Reduce Size of Docker Image?
 
@@ -123,7 +130,7 @@ minikube ip
 
 ### Using a Custom URL for Ingress
 
-* To map a custom url to the ingress IP, the mapping needs to be added to the /etc/hosts file which requires sudo access. No url has been set for this project.
+* To map a custom url to the ingress IP, the mapping needs to be added to the /etc/hosts file which requires sudo access. No url has been set for this project. Instead nip.io is used for custom URLs.
 
 ### Ingress Controller Error
 

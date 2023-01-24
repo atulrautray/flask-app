@@ -8,10 +8,10 @@ WORKDIR /app
 COPY . /app
 
 # Run pip install to install all the package dependencies specified in the requirements.txt file
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Tell Docker that the container will listen on port 5000
-EXPOSE 5000
+# Tell Docker that the container will listen on port 8000
+EXPOSE 8000
 
 # Specify the command that will run when the container starts
-CMD ["python3", "/app/app.py"]
+CMD ["gunicorn", "app:app", "-b", "0.0.0.0:8000"]

@@ -31,6 +31,8 @@ if [ $? -eq 0 ]; then
 
     sleep 10
 
+    unset KUBECONFIG
+
     curl $MINIKUBE_IP/athlete
 else
     echo "Tests failed"

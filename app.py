@@ -13,5 +13,6 @@ def home():
 
 if __name__ == "__main__":
     app.run(
-        host="0.0.0.0"
+        host="0.0.0.0",
+        port=8000,
     )  # run the app on host IP address "0.0.0.0", which means it will be accessible from any IP address on the network
