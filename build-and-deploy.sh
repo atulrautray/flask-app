@@ -27,6 +27,8 @@ if [ $? -eq 0 ]; then
 
     kubectl apply -f deployment.yaml
 
+    kubectl apply -f service.yaml
+
     kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 
     kubectl apply -f flask-app-ingress.yaml
