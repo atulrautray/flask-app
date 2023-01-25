@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd /docker-files
+
 # Install Flask
 pip3 install flask
 
@@ -21,15 +23,19 @@ if [ $? -eq 0 ]; then
     echo "Building image"
     docker build -t flaskapp:latest .
 
+    cd ../k8s-manifest
+
     kubectl apply -f deployment.yaml
 
     kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 
     kubectl apply -f flask-app-ingress.yaml
 
+    cd ..
+
     MINIKUBE_IP=$(minikube ip)
 
-    sleep 10
+    sleep 20
 
     unset KUBECONFIG
 
