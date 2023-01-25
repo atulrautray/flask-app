@@ -28,7 +28,7 @@ The (containerized) Flask app is deployed on kubernetes using three components: 
 
 #### Ingress
 
-* Ingress exposes HTTP and HTTPS routes from outside the cluster to services within the cluster. The ingress is directing traffic to the service named "flask-app-service" on port 5000. The service resource has a selector that matches pods labeled with "app: flask-app" and it exposes the service on port 5000.
+* Ingress exposes HTTP and HTTPS routes from outside the cluster to services within the cluster. The ingress is directing traffic to the service named "flask-app-service" on port 8000. The service resource has a selector that matches pods labeled with "app: flask-app" and it exposes the service on port 8000.
 
 ### build-and-deploy script
 
