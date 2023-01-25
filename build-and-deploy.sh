@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /docker-files
+cd docker-files
 
 # Install Flask
 pip3 install flask
