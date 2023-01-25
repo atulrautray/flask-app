@@ -71,7 +71,7 @@ chmod +x build-and-deploy.sh
 <or>
 chmod +x deletes.sh
 ```
-* Note- Sometimes kubectl commands give error: "The connection to the server localhost:8080 was refused - did you specify the right host or port?". This is due to minikube refering to another config file. To resolve run this command.
+* Note- Sometimes kubectl commands give error: `The connection to the server localhost:8080 was refused - did you specify the right host or port?`. This is due to minikube refering to another config file. To resolve run this command.
 ```
 unset KUBECONFIG
 ```
